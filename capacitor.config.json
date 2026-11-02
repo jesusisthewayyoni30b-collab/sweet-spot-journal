@@ -1,0 +1,11 @@
+{
+  "appId": "com.sweetspot.journal",
+  "appName": "Sweet Spot Trading Journal",
+  "webDir": "www",
+  "server": {
+    "androidScheme": "https"
+  },
+  "android": {
+    "backgroundColor": "#0a0f12"
+  }
+}
