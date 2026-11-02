@@ -17,7 +17,7 @@ let running = false, again = false, timer = null, mounted = false;
 export const attach = (storage) => { inner = storage; };
 export const setTransport = (t) => { T = t; };
 export const markMounted = () => { mounted = true; };
-export const authApi = { isConfigured: fb.isConfigured, signIn: fb.signIn, signUp: fb.signUp, signOut: fb.signOut, onAuth: fb.onAuth, user: fb.currentUser };
+export const authApi = { ready: () => T.ready(), signedIn: () => fb.signedIn(), isConfigured: fb.isConfigured, signIn: fb.signIn, signUp: fb.signUp, signOut: fb.signOut, onAuth: fb.onAuth, user: fb.currentUser };
 const emit = (p) => { state = { ...state, ...p }; listeners.forEach((f) => f(state)); };
 export const subscribe = (f) => { listeners.add(f); f(state); return () => listeners.delete(f); };
 

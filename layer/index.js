@@ -1,5 +1,5 @@
 import * as sync from "./sync.js";
-import { initUI } from "./ui.js";
+import { initUI, initAuthGate } from "./ui.js";
 import { initMobile } from "./mobile.js";
 import { initNative } from "./native.js";
 
@@ -19,7 +19,11 @@ function wrap(s) {
 Object.defineProperty(window, "storage", { configurable: true, get: () => wrapped || undefined, set: (v) => wrap(v) });
 
 sync.startBackground();
+const t0 = performance.now();
+const hideSplash = () => { const el = document.getElementById("ss-splash"); if (!el) return; el.classList.add("ss-out"); setTimeout(() => el.remove(), 800); };
+window.addEventListener("load", () => setTimeout(hideSplash, Math.max(300, 2900 - (performance.now() - t0))));
+setTimeout(hideSplash, 6000);
 window.addEventListener("DOMContentLoaded", () => {
-  initUI(); initMobile(); initNative();
+  initUI(); initMobile(); initNative(); initAuthGate();
   setTimeout(() => sync.markMounted(), 1500);
 });
