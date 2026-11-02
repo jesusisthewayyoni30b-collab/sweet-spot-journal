@@ -38,16 +38,24 @@ function tag() {
   }
 }
 async function goto(label) {
-  // sidebar groups only render their items when expanded: expand, click, collapse
-  openDrawer(true); await sleep(160);
+  // Done silently while the drawer stays closed: expand the group that holds the page, click it, collapse again.
+  if (!sidebar) return;
   const find = () => [...sidebar.querySelectorAll("button[title]")].find((b) => b.title === label);
-  let btn = find();
+  const heads = () => [...sidebar.querySelectorAll("button")].filter((b) => !b.title && /\S/.test(b.textContent) && !/collapse/i.test(b.textContent));
+  let btn = find(), openedText = null;
   if (!btn) {
-    const heads = [...sidebar.querySelectorAll("button")].filter((b) => !b.title && /\S/.test(b.textContent) && !/collapse/i.test(b.textContent));
-    for (const h of heads) { h.click(); await sleep(90); btn = find(); if (btn) break; h.click(); await sleep(50); }
+    for (const h of heads()) {
+      h.click(); await sleep(50); btn = find();
+      if (btn) { openedText = h.textContent.trim(); break; }
+      h.click(); await sleep(20);
+    }
   }
   if (btn) btn.click();
-  openDrawer(false);
+  if (openedText) {
+    await sleep(60);
+    const h = heads().find((x) => x.textContent.trim() === openedText);
+    if (h && find()) h.click();
+  }
 }
 export function initMobile() {
   backdrop = document.createElement("div"); backdrop.className = "ss-m-backdrop"; backdrop.onclick = () => openDrawer(false);
