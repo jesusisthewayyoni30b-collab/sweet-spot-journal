@@ -15,7 +15,7 @@ const svg = (k, cls = "") => `<svg class="${cls}" viewBox="0 0 24 24" fill="none
 
 const findSidebar = () => document.querySelector(".sticky.h-screen") || document.querySelector("aside");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
-function openDrawer(v) { if (!sidebar) return; sidebar.classList.toggle("ss-open", v); backdrop.classList.toggle("ss-open", v); document.body.classList.toggle("ss-lock", v); }
+function openDrawer(v) { if (!sidebar) return; sidebar.classList.toggle("ss-open", v); backdrop.classList.toggle("ss-open", v); }
 function setActive(label) { nav.querySelectorAll("button").forEach((b) => b.classList.toggle("ss-on", b.dataset.l === label)); }
 
 function tag() {
@@ -31,8 +31,8 @@ function tag() {
     const txt = t && t.textContent.trim();
     if (txt && txt !== lastTitle) {
       lastTitle = txt; title.textContent = txt;
-      const hit = ["Trades", "New Trade", "Calendar"].find((x) => txt.toLowerCase() === x.toLowerCase());
-      setActive(hit || (/overview/i.test(txt) ? "Overview" : ""));
+      const k = txt.toLowerCase();
+      setActive(k === "account overview" ? "Overview" : k === "trades" ? "Trades" : (k === "add trade" || k === "new trade") ? "New Trade" : k === "calendar" ? "Calendar" : "");
       main.classList.remove("ss-fade"); void main.offsetWidth; main.classList.add("ss-fade");
     }
   }
@@ -61,7 +61,7 @@ export function initMobile() {
   });
   window.addEventListener("ss-sync", (e) => { syncBtn.dataset.s = e.detail; });
   nav = document.createElement("div"); nav.className = "ss-bottomnav";
-  const tabs = [["overview", "Overview", "Overview"], ["trades", "Trades", "Trades"], ["plus", "New Trade", "New Trade"], ["cal", "Calendar", "Calendar"], ["menu", "Menu", null]];
+  const tabs = [["overview", "Overview", "Account Overview"], ["trades", "Trades", "Trades"], ["plus", "New Trade", "Add Trade"], ["cal", "Calendar", "Calendar"], ["menu", "Menu", null]];
   nav.innerHTML = tabs.map(([i, l]) => `<button data-l="${l}" class="${i === "plus" ? "ss-fab" : ""}"><span class="ss-ic">${svg(i)}</span><span class="ss-lb">${l}</span></button>`).join("");
   nav.onclick = (e) => { const b = e.target.closest("button"); if (!b) return; const l = tabs.find((t) => t[1] === b.dataset.l)[2]; if (l) goto(l); else openDrawer(true); };
   document.body.append(backdrop, appbar, nav);
