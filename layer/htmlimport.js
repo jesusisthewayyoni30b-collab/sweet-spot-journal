@@ -78,7 +78,59 @@ export function toCsv(trades) {
   return lines.join("\n");
 }
 
+const shift = (str, hrs) => {
+  if (!hrs) return str;
+  const d = new Date(str.replace(" ", "T") + "Z"); d.setUTCHours(d.getUTCHours() - hrs);
+  return d.toISOString().slice(0, 19).replace("T", " ");
+};
+const applyOffset = (trades, hrs) => { for (const t of trades) { t.open = shift(t.open, hrs); t.close = shift(t.close, hrs); } return trades; };
+
+// MetaTrader "trading-data" CSV exports (Ticket ID, Open Time, Open Price, Close Time, Close Price, Profit, Lots, Commission, Swap, Symbol, Type, SL, TP ...)
+function splitCsv(line) { const o = []; let c = "", q = false; for (let i = 0; i < line.length; i++) { const ch = line[i]; if (ch === '"') { if (q && line[i + 1] === '"') { c += '"'; i++; } else q = !q; } else if (ch === "," && !q) { o.push(c); c = ""; } else c += ch; } o.push(c); return o; }
+export function parseMtCsv(text) {
+  const lines = text.replace(/^\uFEFF/, "").split(/\r?\n/).filter((l) => l.trim());
+  if (lines.length < 2) return null;
+  const h = splitCsv(lines[0]).map((x) => x.trim().toLowerCase().replace(/[^a-z]/g, ""));
+  const ix = (n) => h.indexOf(n);
+  if (ix("ticketid") < 0 && ix("ticket") < 0 && ix("position") < 0) return null;
+  if (ix("symbol") < 0 || ix("profit") < 0 || ix("opentime") < 0 || ix("closetime") < 0 || (ix("lots") < 0 && ix("volume") < 0 && ix("size") < 0)) return null;
+  const id = ix("ticketid") >= 0 ? ix("ticketid") : ix("ticket") >= 0 ? ix("ticket") : ix("position");
+  const lot = ix("lots") >= 0 ? ix("lots") : ix("size") >= 0 ? ix("size") : ix("volume");
+  const out = [];
+  for (const l of lines.slice(1)) {
+    const c = splitCsv(l); const type = (c[ix("type")] || "").toLowerCase();
+    if (type !== "buy" && type !== "sell") continue;
+    const profit = num(c[ix("profit")]) ?? 0, comm = ix("commission") >= 0 ? num(c[ix("commission")]) ?? 0 : 0, swap = ix("swap") >= 0 ? num(c[ix("swap")]) ?? 0 : 0;
+    const net = round(profit + comm + swap);
+    out.push({
+      open: dt(c[ix("opentime")]), close: dt(c[ix("closetime")]), pair: (c[ix("symbol")] || "").toUpperCase(), dir: type === "buy" ? "Buy" : "Sell",
+      lots: String(c[lot] || "").trim(), entry: c[ix("openprice")] ?? "", exit: c[ix("closeprice")] ?? "", sl: ix("sl") >= 0 && num(c[ix("sl")]) ? c[ix("sl")] : "", tp: ix("tp") >= 0 && num(c[ix("tp")]) ? c[ix("tp")] : "",
+      comm: comm || "", swap: swap || "", gross: round(profit), net, res: net > 0 ? "Win" : net < 0 ? "Loss" : "BE", note: "Ticket " + (c[id] || ""),
+    });
+  }
+  return out.length ? out : null;
+}
+
+// Ask whether to convert broker server time to New York time
+function askOffset() {
+  return new Promise((resolve) => {
+    let saved = "7"; try { saved = localStorage.getItem("ss-broker-offset") || "7"; } catch (e) {}
+    const w = document.createElement("div"); w.className = "ss-off";
+    w.innerHTML = '<div class="ss-off-card"><div class="ss-off-t">Broker report times</div><div class="ss-off-p">MetaTrader reports use your <b>broker server time</b>. The journal (kill zones, sessions, calendar) runs on <b>New York time</b>. Most brokers (FundedNext, FBS, Exness, IC Markets...) are New York + 7 hours.</div>'
+      + '<button class="ss-off-b pri" data-h="7">Convert to New York time (\u22127h)</button>'
+      + '<div class="ss-off-row"><span>Other broker: hours ahead of New York</span><input type="number" step="1" min="-12" max="14" value="' + saved + '"><button class="ss-off-b" data-c="1">Use</button></div>'
+      + '<button class="ss-off-b ghost" data-h="0">Keep the times as they are</button></div>';
+    const done = (h) => { try { localStorage.setItem("ss-broker-offset", String(h)); } catch (e) {} w.remove(); resolve(h); };
+    w.addEventListener("click", (e) => {
+      const b = e.target.closest("button"); if (!b) return;
+      if (b.dataset.c) done(Number(w.querySelector("input").value) || 0); else done(Number(b.dataset.h));
+    });
+    document.body.appendChild(w);
+  });
+}
+
 const isHtml = (f) => /\.html?$/i.test(f.name) || f.type === "text/html";
+const isCsv = (f) => /\.csv$/i.test(f.name);
 
 export function initHtmlImport() {
   // 1) let the Android/desktop picker offer .html files on the journal's import input
@@ -86,19 +138,41 @@ export function initHtmlImport() {
     const el = e.target;
     if (el && el.tagName === "INPUT" && el.type === "file" && /\.csv/i.test(el.accept) && !/html/i.test(el.accept)) el.accept += ",.html,.htm,text/html";
   }, true);
-  // 2) convert a chosen report to a CSV before the journal reads it
+  // 2) convert a chosen MetaTrader report / export to a CSV the journal understands
   document.addEventListener("change", async (e) => {
     const el = e.target;
     if (!el || el.tagName !== "INPUT" || el.type !== "file" || el.__ssConv) return;
     const f = el.files && el.files[0];
-    if (!f || !isHtml(f)) return;
-    e.stopImmediatePropagation(); e.stopPropagation();
+    if (!f) return;
+    const json = /\.json$/i.test(f.name), html = isHtml(f), csv = isCsv(f);
+    if (!json && !html && !csv) return;
+    e.stopImmediatePropagation(); e.stopPropagation();           // hold the event until we know what the file is
+    const pass = () => { el.__ssConv = true; el.dispatchEvent(new Event("change", { bubbles: true })); el.__ssConv = false; };
     try {
-      const trades = parseReport(decode(await f.arrayBuffer()));
-      if (!trades.length) { alert("No closed trades were found in that report. Use the Trade History / Statement HTML exported from MetaTrader (it must contain a Closed Transactions or Positions table)."); el.value = ""; return; }
-      const csv = new File([toCsv(trades)], f.name.replace(/\.html?$/i, "") + ".csv", { type: "text/csv" });
-      const dtf = new DataTransfer(); dtf.items.add(csv); el.files = dtf.files;
-      el.__ssConv = true; el.dispatchEvent(new Event("change", { bubbles: true })); el.__ssConv = false;
-    } catch (err) { alert("Couldn't read that report: " + (err && err.message || err)); el.value = ""; }
+      if (json) {
+        let j = null; try { j = JSON.parse(await f.text()); } catch (err) {}
+        if (j && j.sweetSpotPartial && j.data) { await mergeRestore(j.data); el.value = ""; } else pass();
+        return;
+      }
+      let trades = null;
+      if (html) trades = parseReport(decode(await f.arrayBuffer()));
+      else { trades = parseMtCsv(await f.text()); if (!trades) { pass(); return; } }   // an ordinary CSV: let the journal handle it
+      if (!trades.length) { alert("No closed trades were found in that file. Use the Trade History / Statement HTML exported from MetaTrader (it must contain a Closed Transactions or Positions table)."); el.value = ""; return; }
+      const hrs = await askOffset();
+      const out = new File([toCsv(applyOffset(trades, hrs))], f.name.replace(/\.(html?|csv)$/i, "") + " (converted).csv", { type: "text/csv" });
+      const dtf = new DataTransfer(); dtf.items.add(out); el.files = dtf.files;
+      pass();
+    } catch (err) { alert("Couldn't read that file: " + (err && err.message || err)); el.value = ""; }
   }, true);
+}
+
+async function mergeRestore(d) {
+  const rd = async (k) => { try { const r = await window.storage.get(k, false); return r && r.value ? JSON.parse(r.value) : []; } catch (e) { return []; } };
+  const merge = (cur, add) => { const m = new Map((cur || []).map((x) => [x.id, x])); for (const x of add || []) m.set(x.id, x); return [...m.values()]; };
+  const acc = merge(await rd("sweetspot_accounts"), d.accounts), trd = merge(await rd("sweetspot_trades"), d.trades);
+  await window.storage.set("sweetspot_accounts", JSON.stringify(acc), false);
+  await window.storage.set("sweetspot_trades", JSON.stringify(trd), false);
+  await window.storage.set("sweetspot_samples_seeded_v1", JSON.stringify(true), false);
+  alert("Added " + (d.accounts || []).length + " accounts and " + (d.trades || []).length + " trades. Everything else in your journal was left as it is.");
+  location.reload();
 }
