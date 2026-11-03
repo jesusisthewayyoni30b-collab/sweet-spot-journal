@@ -123,7 +123,7 @@ input[type=range]{accent-color:var(--ssA)}
 .ss-au-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,214,170,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,170,.05) 1px,transparent 1px);background-size:38px 38px;-webkit-mask-image:radial-gradient(circle at 50% 35%,#000,transparent 70%);mask-image:radial-gradient(circle at 50% 35%,#000,transparent 70%)}
 .ss-au-card{position:relative;width:100%;max-width:380px;padding:26px 22px 20px;border-radius:28px;background:rgba(10,18,21,.82);-webkit-backdrop-filter:blur(18px);backdrop-filter:blur(18px);border:1px solid rgba(0,214,170,.25);box-shadow:0 20px 60px rgba(0,0,0,.6),0 0 60px rgba(0,214,170,.08);color:#e8eef2;display:flex;flex-direction:column;animation:ssRise .7s cubic-bezier(.2,.9,.3,1) both}
 @keyframes ssRise{from{opacity:0;transform:translateY(22px) scale(.97)}to{opacity:1;transform:none}}
-.ss-au-logo{width:72px;height:72px;border-radius:20px;align-self:center;box-shadow:0 0 34px rgba(0,214,170,.4)}
+.ss-au-logo{width:84px;height:84px;object-fit:contain;align-self:center;filter:drop-shadow(0 0 14px rgba(34,211,238,.55)) drop-shadow(0 0 30px rgba(0,214,170,.3))}
 .ss-au-h{text-align:center;margin:14px 0 18px;font-weight:800;font-size:19px;letter-spacing:.2em;color:#eafff9;text-shadow:0 0 16px rgba(0,214,170,.5)}
 .ss-au-h b{color:#00e0b4}
 .ss-au-tabs{position:relative;display:grid;grid-template-columns:1fr 1fr;background:rgba(255,255,255,.05);border-radius:14px;padding:4px;margin-bottom:6px}
