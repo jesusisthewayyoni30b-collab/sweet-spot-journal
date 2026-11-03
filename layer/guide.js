@@ -23,3 +23,23 @@ export function initGuide() {
   mo.observe(document.body, { childList: true, subtree: true, characterData: true });
   run();
 }
+
+// The journal sets its theme colours on an inner wrapper, but the phone bars live on <body>.
+// Mirror the theme variables onto <html> so the bars (and sheets/pickers) follow the chosen theme.
+const VARS = ["--ss-bg", "--ss-surface", "--ss-border", "--ss-text", "--ss-text-soft", "--ss-text-muted", "--ss-text-mute2", "--ss-heading", "--ss-hover", "--ss-track", "--wtf-button-text", "--acc-trading"];
+export function initThemeMirror() {
+  let last = "";
+  const sync = () => {
+    const t = document.querySelector("[data-theme]");
+    if (!t) return;
+    const cs = getComputedStyle(t);
+    const vals = VARS.map((v) => cs.getPropertyValue(v).trim());
+    const key = vals.join("|");
+    if (key === last) return; last = key;
+    const r = document.documentElement.style;
+    VARS.forEach((v, i) => { if (vals[i]) r.setProperty(v, vals[i]); });
+    if (vals[11]) r.setProperty("--ssA", vals[11]);
+  };
+  new MutationObserver(sync).observe(document.documentElement, { attributes: true, subtree: true, attributeFilter: ["data-theme", "style"] });
+  setInterval(sync, 1500); sync();
+}

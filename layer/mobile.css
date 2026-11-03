@@ -1,4 +1,4 @@
-:root{--ssA:var(--acc-trading,var(--ssA))}
+:root{--ssA:var(--acc-trading,#00e0b4)}
 /* ---------- Sweet Spot phone layer (only below 768px) ---------- */
 #ss-sync-root{font-family:system-ui,sans-serif}
 .ss-sync-wrap{position:fixed;right:10px;bottom:14px;z-index:60;display:flex;flex-direction:column;align-items:flex-end;gap:8px}
@@ -75,7 +75,7 @@
   .ss-appbar{padding-right:136px !important}
   .session-indicator-fixed{display:none !important}
   .killzone-indicator-fixed{display:none !important}
-  .ss-bottomnav{position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;height:62px;padding:0 6px;background:rgba(9,17,20,.88);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid color-mix(in srgb,var(--ssA) 22%,transparent);border-radius:24px;box-shadow:0 12px 34px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05)}
+  .ss-bottomnav{position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;height:62px;padding:0 6px;background:rgba(6,10,12,.96);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid color-mix(in srgb,var(--ssA) 22%,transparent);border-radius:24px;box-shadow:0 12px 34px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05)}
   .ss-bottomnav button{flex:1;position:relative;height:100%;background:none;border:0;color:#7f9a96;font-size:10px;font-weight:700;letter-spacing:.04em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .25s}
   .ss-bottomnav .ss-ic{display:grid;place-items:center;width:44px;height:28px;border-radius:14px;transition:background .3s,box-shadow .3s,transform .25s}
   .ss-bottomnav svg{width:22px;height:22px;transition:transform .25s}
@@ -83,10 +83,10 @@
   .ss-bottomnav button.ss-on{color:var(--ssA)}
   .ss-bottomnav button.ss-on .ss-ic{background:color-mix(in srgb,var(--ssA) 14%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--ssA) 40%,transparent)}
   .ss-bottomnav button.ss-on svg{transform:translateY(-1px) scale(1.08);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ssA) 70%,transparent))}
-  .ss-bottomnav .ss-fab .ss-ic{width:48px;height:48px;border-radius:17px;margin-top:-22px;color:#04211b;background:linear-gradient(145deg,color-mix(in srgb,var(--ssA) 88%,#fff),var(--ssA));box-shadow:0 8px 22px color-mix(in srgb,var(--ssA) 50%,transparent),0 0 0 4px rgba(9,17,20,.95)}
+  .ss-bottomnav .ss-fab .ss-ic{width:48px;height:48px;border-radius:17px;margin-top:-22px;color:#04211b;background:linear-gradient(145deg,color-mix(in srgb,var(--ssA) 88%,#fff),var(--ssA));box-shadow:0 8px 22px color-mix(in srgb,var(--ssA) 50%,transparent),0 0 0 4px rgba(6,10,12,.96)}
   .ss-bottomnav .ss-fab svg{width:26px;height:26px;stroke-width:2.4}
   .ss-bottomnav .ss-fab .ss-lb{margin-top:-2px}
-  .ss-bottomnav .ss-fab.ss-on .ss-ic{background:linear-gradient(145deg,color-mix(in srgb,var(--ssA) 88%,#fff),var(--ssA));box-shadow:0 8px 26px color-mix(in srgb,var(--ssA) 70%,transparent),0 0 0 4px rgba(9,17,20,.95)}
+  .ss-bottomnav .ss-fab.ss-on .ss-ic{background:linear-gradient(145deg,color-mix(in srgb,var(--ssA) 88%,#fff),var(--ssA));box-shadow:0 8px 26px color-mix(in srgb,var(--ssA) 70%,transparent),0 0 0 4px rgba(6,10,12,.96)}
   .ss-m-main{padding-bottom:104px !important}
 }
 @keyframes ssPulse{50%{opacity:.3}}
@@ -214,9 +214,3 @@ input[type=range]{accent-color:var(--ssA)}
 .ss-off-row{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:12.5px;color:var(--ss-text-soft,#9bb)}
 .ss-off-row span{flex:1}.ss-off-row input{width:64px;border-radius:12px;border:1px solid var(--ss-border,#244);background:transparent;color:var(--ss-text,#fff);padding:10px;text-align:center;font-size:15px}
 .ss-off-row .ss-off-b{width:auto;margin:0;padding:10px 16px}
-
-/* light theme only: a light glass bar so it still reads naturally */
-html:has([data-theme="light"]) .ss-bottomnav{background:rgba(255,255,255,.9);box-shadow:0 10px 28px rgba(20,40,40,.18),inset 0 1px 0 rgba(255,255,255,.8)}
-html:has([data-theme="light"]) .ss-bottomnav button{color:#5d726f}
-html:has([data-theme="light"]) .ss-bottomnav .ss-fab .ss-ic{box-shadow:0 8px 22px color-mix(in srgb,var(--ssA) 40%,transparent),0 0 0 4px rgba(255,255,255,.95)}
-html:has([data-theme="light"]) .ss-appbar{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(246,250,250,.94));color:#16302e}
