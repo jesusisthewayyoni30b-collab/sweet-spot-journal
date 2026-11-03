@@ -3,6 +3,7 @@ import { initUI, initAuthGate } from "./ui.js";
 import { initMobile } from "./mobile.js";
 import { initNative } from "./native.js";
 import { initSelects } from "./select.js";
+import { initPickers } from "./pickers.js";
 
 // Trap window.storage before the journal's bundle assigns it, so every write is noticed
 // and the first reads wait (briefly) for the cloud copy.
@@ -25,6 +26,6 @@ const hideSplash = () => { const el = document.getElementById("ss-splash"); if (
 window.addEventListener("load", () => setTimeout(hideSplash, Math.max(300, 2900 - (performance.now() - t0))));
 setTimeout(hideSplash, 6000);
 window.addEventListener("DOMContentLoaded", () => {
-  initUI(); initMobile(); initSelects(); initNative(); initAuthGate();
+  initUI(); initMobile(); initSelects(); initPickers(); initNative(); initAuthGate();
   setTimeout(() => sync.markMounted(), 1500);
 });

@@ -6,12 +6,10 @@ let sheet = null, target = null;
 
 function labelFor(sel) {
   if (sel.getAttribute("aria-label")) return sel.getAttribute("aria-label");
-  let e = sel;
-  for (let i = 0; i < 3 && e; i++, e = e.parentElement) {
-    const l = e.previousElementSibling && /label/i.test(e.previousElementSibling.tagName) ? e.previousElementSibling : e.querySelector && e.querySelector(":scope > label");
-    if (l && l.textContent.trim()) return l.textContent.replace("*", "").trim();
-  }
-  return "Choose";
+  const par = sel.parentElement;
+  const l = (sel.previousElementSibling && /label/i.test(sel.previousElementSibling.tagName) ? sel.previousElementSibling : par && par.querySelector(":scope > label"));
+  const t = l && l.textContent.replace("*", "").trim();
+  return t && t.length <= 32 ? t : "Choose";
 }
 function close() {
   if (!sheet) return; const s = sheet; sheet = null; target = null;
