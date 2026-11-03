@@ -4,7 +4,7 @@ import splash from "./splash-html.mjs";
 fs.mkdirSync("www", { recursive: true });
 const r = await build({ entryPoints: ["layer/index.js"], bundle: true, minify: true, format: "iife", write: false, target: "es2020", legalComments: "none", loader: { ".png": "dataurl" } });
 const js = r.outputFiles[0].text.replace(/<\/script/gi, "<\\/script");
-const css = fs.readFileSync("layer/splash.css", "utf8") + fs.readFileSync("layer/mobile.css", "utf8");
+const css = fs.readFileSync("layer/splash.css", "utf8") + fs.readFileSync("layer/mobile.css", "utf8") + fs.readFileSync("layer/guide.css", "utf8");
 let html = fs.readFileSync("source/SweetSpotTradingJourney.html", "utf8");
 html = html.replace(/<meta name="viewport"[^>]*>/, '<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />');
 html = html.replace("<title>Sweet Spot Trading Journey</title>", "<title>Sweet Spot Trading Journal</title>");

@@ -53,7 +53,7 @@
   .ss-m-main svg{max-width:100%}
   .ss-m-main table{display:block;overflow-x:auto;max-width:100%}
   .ss-m-main .flex.border-b{flex-wrap:wrap}
-  .ss-appbar{position:fixed;top:0;left:0;right:0;height:calc(54px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:4px;padding:env(safe-area-inset-top) 8px 0;background:color-mix(in srgb,var(--ss-bg) 92%,transparent);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:var(--ss-text,#e8eef2);border-bottom:1px solid color-mix(in srgb,var(--ssA) 18%,transparent)}
+  .ss-appbar{position:fixed;top:0;left:0;right:0;height:calc(54px + env(safe-area-inset-top));z-index:40;display:flex;align-items:center;gap:4px;padding:env(safe-area-inset-top) 8px 0;background:linear-gradient(180deg,rgba(6,12,14,.98),rgba(8,15,18,.94));-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#e8eef2;border-bottom:1px solid color-mix(in srgb,var(--ssA) 20%,transparent)}
   .ss-appbar:after{content:"";position:absolute;left:0;right:0;bottom:-1px;height:1px;background:linear-gradient(90deg,transparent,color-mix(in srgb,var(--ssA) 70%,transparent),transparent);opacity:.6}
   .ss-ab-btn{position:relative;width:42px;height:42px;display:grid;place-items:center;background:color-mix(in srgb,var(--ss-text) 4%,transparent);border:1px solid color-mix(in srgb,var(--ss-text) 7%,transparent);border-radius:14px;color:var(--ss-text,#e8eef2);cursor:pointer;transition:transform .15s,background .2s,box-shadow .2s}
   .ss-ab-btn:active{transform:scale(.9);background:color-mix(in srgb,var(--ssA) 16%,transparent);box-shadow:0 0 16px color-mix(in srgb,var(--ssA) 35%,transparent)}
@@ -75,18 +75,18 @@
   .ss-appbar{padding-right:136px !important}
   .session-indicator-fixed{display:none !important}
   .killzone-indicator-fixed{display:none !important}
-  .ss-bottomnav{position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;height:62px;padding:0 6px;background:color-mix(in srgb,var(--ss-surface) 88%,transparent);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid color-mix(in srgb,var(--ssA) 20%,transparent);border-radius:24px;box-shadow:0 12px 34px rgba(0,0,0,.55),inset 0 1px 0 color-mix(in srgb,var(--ss-text) 5%,transparent)}
-  .ss-bottomnav button{flex:1;position:relative;height:100%;background:none;border:0;color:var(--ss-text-mute2,#7f9a96);font-size:10px;font-weight:700;letter-spacing:.04em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .25s}
+  .ss-bottomnav{position:fixed;left:10px;right:10px;bottom:calc(8px + env(safe-area-inset-bottom));z-index:40;display:flex;align-items:center;height:62px;padding:0 6px;background:rgba(9,17,20,.88);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);border:1px solid color-mix(in srgb,var(--ssA) 22%,transparent);border-radius:24px;box-shadow:0 12px 34px rgba(0,0,0,.55),inset 0 1px 0 rgba(255,255,255,.05)}
+  .ss-bottomnav button{flex:1;position:relative;height:100%;background:none;border:0;color:#7f9a96;font-size:10px;font-weight:700;letter-spacing:.04em;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;cursor:pointer;-webkit-tap-highlight-color:transparent;transition:color .25s}
   .ss-bottomnav .ss-ic{display:grid;place-items:center;width:44px;height:28px;border-radius:14px;transition:background .3s,box-shadow .3s,transform .25s}
   .ss-bottomnav svg{width:22px;height:22px;transition:transform .25s}
   .ss-bottomnav button:active .ss-ic{transform:scale(.88)}
   .ss-bottomnav button.ss-on{color:var(--ssA)}
   .ss-bottomnav button.ss-on .ss-ic{background:color-mix(in srgb,var(--ssA) 14%,transparent);box-shadow:0 0 18px color-mix(in srgb,var(--ssA) 40%,transparent)}
   .ss-bottomnav button.ss-on svg{transform:translateY(-1px) scale(1.08);filter:drop-shadow(0 0 6px color-mix(in srgb,var(--ssA) 70%,transparent))}
-  .ss-bottomnav .ss-fab .ss-ic{width:48px;height:48px;border-radius:17px;margin-top:-22px;color:var(--wtf-button-text,#04211b);background:linear-gradient(145deg,var(--ssA),color-mix(in srgb,var(--ssA) 75%,#000));box-shadow:0 8px 22px color-mix(in srgb,var(--ssA) 50%,transparent),0 0 0 4px var(--ss-surface)}
+  .ss-bottomnav .ss-fab .ss-ic{width:48px;height:48px;border-radius:17px;margin-top:-22px;color:#04211b;background:linear-gradient(145deg,color-mix(in srgb,var(--ssA) 88%,#fff),var(--ssA));box-shadow:0 8px 22px color-mix(in srgb,var(--ssA) 50%,transparent),0 0 0 4px rgba(9,17,20,.95)}
   .ss-bottomnav .ss-fab svg{width:26px;height:26px;stroke-width:2.4}
   .ss-bottomnav .ss-fab .ss-lb{margin-top:-2px}
-  .ss-bottomnav .ss-fab.ss-on .ss-ic{background:linear-gradient(145deg,var(--ssA),color-mix(in srgb,var(--ssA) 75%,#000));box-shadow:0 8px 26px color-mix(in srgb,var(--ssA) 70%,transparent),0 0 0 4px var(--ss-surface)}
+  .ss-bottomnav .ss-fab.ss-on .ss-ic{background:linear-gradient(145deg,color-mix(in srgb,var(--ssA) 88%,#fff),var(--ssA));box-shadow:0 8px 26px color-mix(in srgb,var(--ssA) 70%,transparent),0 0 0 4px rgba(9,17,20,.95)}
   .ss-m-main{padding-bottom:104px !important}
 }
 @keyframes ssPulse{50%{opacity:.3}}
@@ -214,3 +214,9 @@ input[type=range]{accent-color:var(--ssA)}
 .ss-off-row{display:flex;gap:8px;align-items:center;margin-top:12px;font-size:12.5px;color:var(--ss-text-soft,#9bb)}
 .ss-off-row span{flex:1}.ss-off-row input{width:64px;border-radius:12px;border:1px solid var(--ss-border,#244);background:transparent;color:var(--ss-text,#fff);padding:10px;text-align:center;font-size:15px}
 .ss-off-row .ss-off-b{width:auto;margin:0;padding:10px 16px}
+
+/* light theme only: a light glass bar so it still reads naturally */
+html:has([data-theme="light"]) .ss-bottomnav{background:rgba(255,255,255,.9);box-shadow:0 10px 28px rgba(20,40,40,.18),inset 0 1px 0 rgba(255,255,255,.8)}
+html:has([data-theme="light"]) .ss-bottomnav button{color:#5d726f}
+html:has([data-theme="light"]) .ss-bottomnav .ss-fab .ss-ic{box-shadow:0 8px 22px color-mix(in srgb,var(--ssA) 40%,transparent),0 0 0 4px rgba(255,255,255,.95)}
+html:has([data-theme="light"]) .ss-appbar{background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(246,250,250,.94));color:#16302e}

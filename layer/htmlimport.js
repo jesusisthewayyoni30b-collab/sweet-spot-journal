@@ -132,7 +132,18 @@ function askOffset() {
 const isHtml = (f) => /\.html?$/i.test(f.name) || f.type === "text/html";
 const isCsv = (f) => /\.csv$/i.test(f.name);
 
+// make the import screen say that MetaTrader HTML reports are welcome
+function relabel() {
+  const map = [
+    [/^Import Trades from Excel \/ CSV$/, "Import Trades \u2014 Excel, CSV or MetaTrader HTML"],
+    [/^Choose an \.xlsx, \.xls, or \.csv file to get started\.$/, "Choose an .xlsx, .xls, .csv file or a MetaTrader .html report (MT4 / MT5 / FBS statement) to get started."],
+  ];
+  const w = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+  let n; while ((n = w.nextNode())) { const t = (n.nodeValue || "").trim(); if (t.length > 20 && t.length < 70) for (const [re, to] of map) if (re.test(t) && n.nodeValue !== to) n.nodeValue = to; }
+}
+
 export function initHtmlImport() {
+  let rt = 0; new MutationObserver(() => { clearTimeout(rt); rt = setTimeout(relabel, 120); }).observe(document.body, { childList: true, subtree: true });
   // 1) let the Android/desktop picker offer .html files on the journal's import input
   document.addEventListener("click", (e) => {
     const el = e.target;
