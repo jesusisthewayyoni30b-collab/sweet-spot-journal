@@ -16,3 +16,9 @@ jobs:
           firebaseServiceAccount: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
           projectId: sweet-spot-journal
           channelId: live
+      - name: Publish Firestore rules (needs the service account to have the Firebase Rules Admin role)
+        continue-on-error: true
+        run: |
+          echo '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}' > "$RUNNER_TEMP/sa.json"
+          GOOGLE_APPLICATION_CREDENTIALS="$RUNNER_TEMP/sa.json" npx -y firebase-tools@13 deploy --only firestore:rules --project sweet-spot-journal
+          rm -f "$RUNNER_TEMP/sa.json"

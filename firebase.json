@@ -1,4 +1,8 @@
 {
   "firestore": { "rules": "firestore.rules" },
-  "hosting": { "public": "www", "ignore": ["firebase.json", "**/.*"] }
+  "hosting": {
+    "public": "www",
+    "ignore": ["firebase.json", "**/.*", "**/node_modules/**"],
+    "rewrites": [{ "source": "/s/**", "destination": "/s.html" }]
+  }
 }

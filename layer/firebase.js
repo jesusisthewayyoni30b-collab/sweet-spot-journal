@@ -48,3 +48,13 @@ export async function put(key, t, value) {
   await setDoc(doc(db, ...base(), "meta", enc(key)), { key, t, n }); // meta LAST: a half-finished write never looks new
   for (let i = n; i < oldN; i++) await deleteDoc(doc(db, ...base(), "data", `${enc(key)}__${i}`));
 }
+
+// ---- public read-only trade shares: shares/{id} = { owner, t, d(JSON string) } ----
+export async function shareSave(id, payload) {
+  if (!currentUser()) throw new Error("Sign in first");
+  await setDoc(doc(db, "shares", id), { owner: currentUser().uid, t: Date.now(), d: JSON.stringify(payload) });
+}
+export async function shareDelete(id) {
+  if (!currentUser()) throw new Error("Sign in first");
+  await deleteDoc(doc(db, "shares", id));
+}

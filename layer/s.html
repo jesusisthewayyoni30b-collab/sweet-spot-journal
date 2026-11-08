@@ -1,0 +1,44 @@
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0b1514"><title>Shared trade — Sweet Spot Trading Journal</title>
+<link rel="icon" href="data:image/png;base64,__FAV__">
+<style>
+:root{--bg:#0b1514;--card:#12201f;--bd:#233b38;--tx:#e8f3f1;--sf:#8fa9a5;--ac:#00e0b4;--w:#22c55e;--l:#ef4444}
+*{box-sizing:border-box}body{margin:0;background:radial-gradient(900px 500px at 50% -10%,#10332e,transparent),var(--bg);color:var(--tx);font:15px/1.5 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;padding:max(16px,env(safe-area-inset-top)) 16px 40px}
+.w{max-width:560px;margin:0 auto}.top{display:flex;align-items:center;gap:10px;margin:6px 0 16px;color:var(--sf);font-size:13px}.top img{width:30px;height:30px;border-radius:8px}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:20px;padding:20px;box-shadow:0 0 30px rgba(0,224,180,.08)}
+.h{display:flex;justify-content:space-between;gap:12px;align-items:flex-start}.pair{font-size:26px;font-weight:800}.sub{color:var(--sf);font-size:13.5px}
+.res{font-weight:700;font-size:22px;text-align:right}.res small{display:block;font-size:13px;font-weight:600}
+.res.W{color:var(--w)}.res.L{color:var(--l)}.res.BE{color:#facc15}
+.card.cW{border-color:rgba(34,197,94,.5)}.card.cL{border-color:rgba(239,68,68,.5)}
+.g{display:grid;grid-template-columns:1fr 1fr;gap:14px 12px;margin-top:18px;padding-top:16px;border-top:1px solid var(--bd)}
+.g div span{display:block;font-size:11px;letter-spacing:.06em;text-transform:uppercase;color:var(--sf)}.g div b{font-weight:600;font-size:16px}
+.sec{margin-top:18px}.sec h3{margin:0 0 6px;font-size:12px;letter-spacing:.07em;text-transform:uppercase;color:var(--sf)}.sec p{margin:0;white-space:pre-wrap;word-break:break-word}
+.im{margin-top:10px}.im span{font-size:12px;color:var(--sf)}.im img{display:block;width:100%;border-radius:12px;border:1px solid var(--bd);margin-top:4px}
+.lk a{display:inline-block;margin:4px 6px 0 0;padding:8px 12px;border-radius:12px;border:1px solid var(--bd);color:var(--ac);text-decoration:none;font-size:14px}
+.ft{margin-top:20px;text-align:center;color:var(--sf);font-size:12.5px}.ft a{color:var(--ac)}
+.msg{text-align:center;padding:60px 10px;color:var(--sf)}
+</style></head><body><div class="w"><div class="top"><img src="data:image/png;base64,__FAV__" alt=""><span>Sweet Spot Trading Journal · shared trade (read-only)</span></div><div id="o" class="msg">Loading…</div><div class="ft">Shared from <a href="/">Sweet Spot Trading Journal</a></div></div>
+<script>
+var KEY="__KEY__",PID="__PID__";
+var e=function(s){return String(s==null?"":s).replace(/[&<>"]/g,function(c){return{"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]})};
+var id=(location.pathname.match(/\/s\/([A-Za-z0-9_-]+)/)||[])[1],o=document.getElementById("o");
+function show(m){o.className="msg";o.textContent=m}
+function cell(k,v){return v===""||v==null||v==="—"?"":'<div><span>'+k+'</span><b>'+e(v)+'</b></div>'}
+function money(p){var n=Number(p.net);return(n<0?"-":"+")+e(p.cur)+Math.abs(n).toFixed(2)}
+function safeUrl(u){return /^https?:\/\//i.test(u)?u:null}
+function render(p){
+ var r=p.result==="W"?"W":p.result==="L"?"L":"BE",lab={W:"Win",L:"Loss",BE:"Break-even"}[r];
+ var big=p.hidePnl?(p.actualRR&&p.actualRR!=="—"?e(p.actualRR):lab):money(p);
+ var h='<div class="card c'+r+'"><div class="h"><div><div class="pair">'+e(p.pair)+' · '+e(String(p.direction||"").replace(/\/.*/,"").replace("Buy","Long").replace("Sell","Short"))+'</div><div class="sub">'+e(p.date)+(p.by?' · by '+e(p.by):'')+'</div></div><div class="res '+r+'">'+big+'<small>'+lab+'</small></div></div><div class="g">'
+ +cell("Session",p.session)+cell("Setup",p.setup)+cell("Daily bias",p.bias)+cell("Lot size",p.lot)+cell("Open",p.open)+cell("Close",p.close)+cell("Duration",p.duration)+cell("Planned R:R",p.rr)+cell("Actual R:R",p.actualRR)
+ +cell("Entry",p.openPrice)+cell("Exit",p.closePrice)+cell("Stop loss",p.sl)+cell("Take profit",p.tp)+cell("SL pips",p.slPips)+cell("TP pips",p.tpPips)+(p.riskPct?cell("Risk %",p.riskPct+"%"):"")+'</div>';
+ if(p.confluences)h+='<div class="sec"><h3>Confluences</h3><p>'+e(p.confluences)+'</p></div>';
+ if(p.notes)h+='<div class="sec"><h3>Notes</h3><p>'+e(p.notes)+'</p></div>';
+ if(p.lesson)h+='<div class="sec"><h3>Lesson</h3><p>'+e(p.lesson)+'</p></div>';
+ var L=(p.links||[]).filter(function(l){return safeUrl(l.u)});
+ if(L.length)h+='<div class="sec lk"><h3>Charts</h3>'+L.map(function(l){return'<a href="'+e(safeUrl(l.u))+'" target="_blank" rel="noopener noreferrer">'+e(l.n)+' chart ↗</a>'}).join("")+'</div>';
+ (p.imgs||[]).forEach(function(i){if(/^data:image\/(jpeg|png|webp);base64,/.test(i.u))h+='<div class="im"><span>'+e(i.n)+'</span><img src="'+e(i.u)+'" alt=""></div>'});
+ o.className="";o.innerHTML=h+"</div>";document.title=p.pair+" trade — Sweet Spot Trading Journal";
+}
+if(!id)show("This link isn't valid.");else
+fetch("https://firestore.googleapis.com/v1/projects/"+PID+"/databases/(default)/documents/shares/"+id+"?key="+KEY).then(function(r){if(!r.ok)throw r.status;return r.json()}).then(function(j){render(JSON.parse(j.fields.d.stringValue))}).catch(function(s){show(s===404||s===403?"This shared trade isn't available any more.":"Couldn't load this trade. Check your connection and try again.")});
+</script></body></html>

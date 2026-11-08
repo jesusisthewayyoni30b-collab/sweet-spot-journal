@@ -32,3 +32,9 @@ if (ri < 0) throw new Error("root div not found");
 html = html.slice(0, ri) + splash + html.slice(ri);
 fs.writeFileSync("www/index.html", html);
 console.log("www/index.html", (html.length / 1e6).toFixed(2) + " MB");
+
+// public share viewer, served at /s/<id>
+const cfg = (await import("../layer/firebase-config.js")).firebaseConfig;
+const fav = fs.readFileSync("layer/favicon-192.png").toString("base64");
+fs.writeFileSync("www/s.html", fs.readFileSync("layer/s.html", "utf8").replaceAll("__FAV__", fav).replace("__KEY__", cfg.apiKey).replace("__PID__", cfg.projectId));
+console.log("www/s.html");
