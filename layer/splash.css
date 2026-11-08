@@ -3,7 +3,7 @@
 #ss-splash:before{content:"";position:absolute;width:140vmax;height:140vmax;left:50%;top:50%;margin:-70vmax 0 0 -70vmax;background:radial-gradient(closest-side,rgba(0,214,170,.16),rgba(0,214,170,0) 60%);animation:ssBreath 3.2s ease-in-out infinite}
 #ss-splash .grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,214,170,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(0,214,170,.06) 1px,transparent 1px);background-size:38px 38px;-webkit-mask-image:radial-gradient(circle at 50% 45%,#000 0,transparent 62%);mask-image:radial-gradient(circle at 50% 45%,#000 0,transparent 62%);opacity:0;animation:ssFadeIn 1s .2s forwards}
 #ss-splash .mark{position:relative;width:132px;height:132px;display:flex;align-items:center;justify-content:center;opacity:0;transform:scale(.6);animation:ssPop .9s cubic-bezier(.2,1.3,.3,1) .15s forwards}
-#ss-splash .mark img{width:124px;height:124px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 16px rgba(34,211,238,.6)) drop-shadow(0 0 40px rgba(0,214,170,.35))}
+#ss-splash .mark img{width:128px;height:128px;object-fit:contain;position:relative;z-index:2;filter:drop-shadow(0 0 16px rgba(34,211,238,.6)) drop-shadow(0 0 40px rgba(0,214,170,.35))}
 #ss-splash .ring{position:absolute;inset:0;border-radius:36px;border:2px solid rgba(0,214,170,.55);animation:ssRing 2.2s ease-out .6s infinite;opacity:0}
 #ss-splash .ring.r2{animation-delay:1.2s}
 #ss-splash .word{margin-top:34px;display:flex;gap:.04em;font:800 30px/1 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;letter-spacing:.2em;color:#eafff9;text-shadow:0 0 18px rgba(0,214,170,.55);padding-left:.2em}
